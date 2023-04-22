@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+  <title>Results</title>
+
+  <style>
+        h1 {
+        text-align: center;
+        }
+		.container {
+		    clear: both;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+		}
+<!--		.map-image {-->
+<!--			max-width: 50%;-->
+<!--			margin: 10px;-->
+<!--		}-->
+		#chart1 {
+			width: 50%;
+			float: left;
+			margin: 10px;
+			display: inline-block;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+		.chart img {
+			max-width: 100%;
+			height: auto;
+		}
+	</style>
+</head>
+<body>
+<h1>Results for {{ entry_code }}</h1>
+<!--<div class="container">-->
+<!--  {% for country, map_images in map_images.items() %}-->
+<!--  {% if country.lower() in entry_country.lower() %}-->
+<!--  <img class="map-image" src="{{ map_images }}" alt="{{ entry_country }} map">-->
+<!--  {% endif %}-->
+<!--  {% endfor %}-->
+<!--</div>-->
+
+<div class="container">
+  <div id="chart1" >
+    <h2>Obesity Rates by Gender</h2>
+    {% if fig1 %}
+    {{ fig1|safe }}
+    {% else %}
+    <p>No data available for this entry.</p>
+    {% endif %}
+  </div>
+
+  <div id="chart2" >
+    <h2>Total Meat and Grain Consumption</h2>
+    {% if fig2 %}
+    {{ fig2|safe }}
+    {% else %}
+    <p>No data available for this entry.</p>
+    {% endif %}
+  </div>
+</div>
+</body>
+</html>

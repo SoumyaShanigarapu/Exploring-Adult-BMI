@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+
+<body>
+<div id="map" style="height: 580px;"></div>
+<form id="submit-form" action="http://127.0.0.1:5000/submit" method="POST">
+    <label for="entry_country">Enter any country: </label>
+    <input type="text" id="entry_country" name="entry_country" required>
+    <br>
+    <label for="entry_year">Enter any year: </label>
+    <input type="number" id="entry_year" name="entry_year" required>
+    <br>
+    <input type="submit" value="Submit">
+</form>
+<script>
+    var countries = [
+        {
+            name: 'Argentina',
+            latlng: [-38.4161, -63.6167]
+        },
+        {
+            name: 'Australia',
+            latlng: [-25.2744, 133.7751]
+        },
+        {
+            name: 'Brazil',
+            latlng: [-14.235, -51.9253]
+        },
+        {
+        'name': 'Canada',
+        'latlng': [56.1304, -106.3468]
+        },
+        {
+            'name': 'Chile',
+            'latlng': [-35.6751, -71.543]
+        },
+        {
+            'name': 'China',
+            'latlng': [35.8617, 104.1954]
+        },
+        {
+            'name': 'Colombia',
+            'latlng': [4.5709, -74.2973]
+        },
+        {
+            'name': 'Egypt',
+            'latlng': [26.8206, 30.8025]
+        },
+        {
+            'name': 'Ethiopia',
+            'latlng': [9.145, 40.4897]
+        },
+        {
+            'name': 'India',
+            'latlng': [20.5937, 78.9629]
+        },
+        {
+            'name': 'Indonesia',
+            'latlng': [-0.7893, 113.9213]
+        },
+        {
+            'name': 'Iran (Islamic Republic of)',
+            'latlng': [32.4279, 53.688]
+        },
+        {
+            'name': 'Israel',
+            'latlng': [31.0461, 34.8516]
+        },
+        {
+            'name': 'Japan',
+            'latlng': [36.2048, 138.2529]
+        },
+        {
+            'name': 'Kazakhstan',
+            'latlng': [48.0196, 66.9237]
+        },
+        {
+            'name': 'Malaysia',
+            'latlng': [4.2105, 101.9758]
+        },
+        {
+            'name': 'Mexico',
+            'latlng': [23.6345, -102.5528]
+        },
+        {
+            'name': 'New Zealand',
+            'latlng': [-40.9006, 174.886]
+        },
+        {
+            'name': 'Nigeria',
+            'latlng': [9.082, 8.6753]
+        },
+        {
+            'name': 'Pakistan',
+            'latlng': [30.3753, 69.3451]
+        },
+        {
+            'name': 'Paraguay',
+            'latlng': [-23.4425, -58.4438]
+        },
+        {
+            'name': 'Peru',
+            'latlng': [-9.19, -75.0152]
+        },
+        {
+            'name': 'Philippines',
+            'latlng': [12.8797, 121.774]
+        },
+        {
+            'name': 'Republic of Korea',
+            'latlng': [35.9078, 127.7669]
+        },
+        {
+            'name': 'Russian Federation',
+            'latlng': [61.524, 105.3188]
+        },
+        {
+            'name': 'Saudi Arabia',
+            'latlng': [23.8859, 45.0792]
+        },
+        {
+            'name': 'South Africa',
+            'latlng': [-30.5595, 22.9375]
+        },
+        {
+            'name': 'Thailand',
+            'latlng': [15.8700, 100.9925]
+        },
+        {
+            'name': 'Turkey',
+            'latlng': [38.9637, 35.2433]
+        },
+        {
+            'name': 'Ukraine',
+            'latlng': [48.3794, 31.1656]
+        },
+        {
+            'name': 'United States of America',
+            'latlng': [37.0902, -95.7129]
+        },
+        {
+            'name': 'Viet Nam',
+            'latlng': [14.0583, 108.2772]
+        }
+    ];
+
+    var map = L.map('map').setView([0, 25], 2);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution:
+            'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1
+    }).addTo(map);
+
+    var form = document.getElementById('submit-form');
+
+    for (var i = 0; i < countries.length; i++) {
+        var country = countries[i];
+
+        var marker = L.marker(country.latlng, {
+            title: country.name // set the title option to the country name
+        }).addTo(map);
+
+        marker.on('click', function(e) {
+            var countryName = e.target.options.title;
+
+            var popup = L.popup()
+                .setLatLng(e.latlng)
+                .setContent(countryName)
+                .openOn(map);
+
+            form.addEventListener("submit", function(event) {
+                event.preventDefault(); // prevent default form submission
+                var entryCountry = document.getElementById("entry_country").value;
+                var entryYear = document.getElementById("entry_year").value;
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/submit");
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        // success - do something with the response if needed
+                    }
+                };
+                var params = "entry_country=" + entryCountry + "&entry_year=" + entryYear;
+                xhr.send(params);
+                popup.remove();
+            });
+        });
+    }
+</script>
+</body>
+</html>
