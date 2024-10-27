@@ -1,4 +1,3 @@
-# **Exploring Adult BMI**
 
 ## **Introduction**
 
@@ -48,11 +47,13 @@ Follow the instructions below to set up the **Exploring Adult BMI** project on y
 
 If your project includes a `requirements.txt` file, install the necessary libraries by running:
 
-```bash
 pip install -r requirements.txt
-### **Step 5: Run the Application **
-In IntelliJ IDEA, right-click on app.py and select Run 'app'.
-After the application starts successfully, you will be redirected to a webpage.
-Alternatively, click the hyperlink displayed in the console.
-On the webpage, enter a valid Country and Year in the provided input fields.
-Click Submit to view the results on the results page.
+
+### **Step 5: Run the Application**
+
+1. In IntelliJ IDEA, right-click on `app.py` and select **Run 'app'**.
+2. After the application starts successfully, you will see output in the console indicating that the server is running.
+   - The console may also provide a hyperlink; if it does, click the hyperlink to open the application in your web browser.
+3. You will be redirected to a webpage where you can enter the required inputs.
+4. In the input fields, enter a valid **Country** and **Year**.
+5. Click the **Submit** button to view the results displayed on the results page.
